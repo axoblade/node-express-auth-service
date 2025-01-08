@@ -1,0 +1,132 @@
+datasource db {
+  provider = "mysql" // Database engine is specified via environment variables
+  url      = env("DATABASE_URL") // Connection string provided dynamically
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                        String   @id @default(uuid()) // Primary Key (UUID)
+  email                     String   @unique
+  phone                   String   @unique
+  name                      String
+  password                  String
+  isActive                  Boolean  @default(true)
+  emailVerified             Boolean  @default(false)
+  otp                       String?  // Optional field for OTP
+  otpExpiresAt              DateTime? // Optional expiry time for OTP
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  // Relations
+  roles                     UserRole[]
+  PasswordResetToken        PasswordResetToken[]
+  EmailVerificationToken    EmailVerificationToken[]
+  Tag                       UserTag[]
+}
+
+model Role {
+  id                        String   @id @default(uuid()) // Primary Key (UUID)
+  name                      String   @unique
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  // Relations
+  permissions               RolePermission[]
+  users                     UserRole[]
+  Tag                       RoleTag[]
+}
+
+model Permission {
+  id                        String   @id @default(uuid()) // Primary Key (UUID)
+  name                      String   @unique
+  description               String?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @default(now())
+
+  // Relations
+  roles                     RolePermission[]
+}
+
+model UserRole {
+  id                        String   @id @default(uuid()) // Primary Key (UUID)
+  userId                    String
+  roleId                    String
+
+  // Relations
+  user                      User     @relation(fields: [userId], references: [id])
+  role                      Role     @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId]) // Prevent duplicate user-role pairs
+}
+
+model RolePermission {
+  id                        String   @id @default(uuid()) // Primary Key (UUID)
+  roleId                    String
+  permissionId              String
+
+  // Relations
+  role                      Role       @relation(fields: [roleId], references: [id])
+  permission                Permission @relation(fields: [permissionId], references: [id])
+
+  @@unique([roleId, permissionId]) // Prevent duplicate role-permission pairs
+}
+
+model Tag {
+  id          String   @id @default(uuid()) // Primary Key (UUID)
+  name        String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  UserTag UserTag[]
+
+  RoleTag RoleTag[]
+}
+
+model UserTag {
+  id          String   @id @default(uuid()) // Primary Key (UUID)
+  userId      String
+  tagId       String
+
+  // Relations
+  user        User @relation(fields: [userId], references: [id])
+  tag         Tag  @relation(fields: [tagId], references: [id])
+
+  @@unique([userId, tagId]) // Prevent duplicate user-tag pairs
+}
+
+model RoleTag {
+  id          String   @id @default(uuid()) // Primary Key (UUID)
+  roleId      String
+  tagId       String
+
+  // Relations
+  role        Role @relation(fields: [roleId], references: [id])
+  tag         Tag  @relation(fields: [tagId], references: [id])
+
+  @@unique([roleId, tagId]) // Prevent duplicate role-tag pairs
+}
+
+model PasswordResetToken {
+  id                        String   @id @default(uuid()) // Primary Key (UUID)
+  token                     String   @unique
+  userId                    String
+  expiresAt                 DateTime
+  createdAt                 DateTime @default(now())
+
+  // Relations
+  user                      User     @relation(fields: [userId], references: [id])
+}
+
+model EmailVerificationToken {
+  id                        String   @id @default(uuid()) // Primary Key (UUID)
+  token                     String   @unique
+  userId                    String
+  expiresAt                 DateTime
+  createdAt                 DateTime @default(now())
+
+  // Relations
+  user                      User     @relation(fields: [userId], references: [id])
+}

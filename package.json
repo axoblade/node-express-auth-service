@@ -1,0 +1,43 @@
+{
+	"name": "@axoblade/qualiworth-hike-api",
+	"version": "1.0.0",
+	"description": "Qualiworth Hike API Service",
+	"main": "server.js",
+	"scripts": {
+		"test": "jest",
+		"dev": "nodemon src/server.js",
+		"start": "node src/server.js",
+		"resetdb": "node reset_db.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/axoblade/qualiworth-hike-api.git"
+	},
+	"keywords": [
+		"Auth",
+		"JWT",
+		"2FA"
+	],
+	"author": "axoblade",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/axoblade/qualiworth-hike-api/issues"
+	},
+	"homepage": "https://github.com/axoblade/qualiworth-hike-api#readme",
+	"dependencies": {
+		"@prisma/client": "^6.1.0",
+		"bcrypt": "^5.1.1",
+		"express": "^4.21.2",
+		"express-validator": "^7.2.0",
+		"jsonwebtoken": "^9.0.2",
+		"morgan": "^1.10.0",
+		"mysql2": "^3.12.0",
+		"prisma": "^6.1.0"
+	},
+	"devDependencies": {
+		"dotenv": "^16.4.7",
+		"jest": "^29.7.0",
+		"nodemon": "^3.1.9",
+		"supertest": "^7.0.0"
+	}
+}
