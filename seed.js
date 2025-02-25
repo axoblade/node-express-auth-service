@@ -97,7 +97,7 @@ const seed = async () => {
 		console.log("Associated Admin Tag with System Admin role.");
 
 		// Create System Admin User
-		const adminEmail = process.env.ADMIN_EMAIL || "axoblade@gmail.com";
+		const adminEmail = process.env.ADMIN_EMAIL || "admin@email.com";
 		const existingAdmin = await prisma.user.findUnique({
 			where: { email: adminEmail },
 		});

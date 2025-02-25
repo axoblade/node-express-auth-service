@@ -6,12 +6,12 @@ const bcrypt = require("bcrypt");
 const addUser = async (email, roleId, name, tagId, phone) => {
 	try {
 		// Validate the tag ID
-		const tagExists = await prisma.tag.findUnique({
+		/**const tagExists = await prisma.tag.findUnique({
 			where: { id: tagId },
 		});
 		if (!tagExists) {
 			throw new Error("Invalid tag ID");
-		}
+		}**/
 
 		// Validate the role ID
 		const roleExists = await prisma.role.findUnique({
@@ -33,9 +33,9 @@ const addUser = async (email, roleId, name, tagId, phone) => {
 		});
 
 		// Create the relationship in the UserTag table
-		await prisma.userTag.create({
-			data: { userId: user.id, tagId },
-		});
+		/**await prisma.userTag.create({
+			data: { userId: user.id },
+		});**/
 
 		// Assign role to the user via the UserRole table
 		await prisma.userRole.create({
