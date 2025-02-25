@@ -221,7 +221,7 @@ const generateAccessToken = async (userId) => {
 			permissions,
 		},
 		process.env.JWT_SECRET,
-		{ expiresIn: "1h" } // Access token expires in 1 hour
+		{ expiresIn: "23h" } // Access token expires in 1 hour
 	);
 };
 
