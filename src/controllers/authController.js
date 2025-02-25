@@ -68,14 +68,28 @@ const loginUser = async (req, res) => {
 		}
 
 		// Use success middleware
-		return res.success(
+		/**return res.success(
 			`Login successful, OTP sent via ${isEmail ? "email" : "SMS"}`,
 			{
 				name: user.name,
 				userId: user.id,
 				requires2FA: true,
 			}
-		);
+		);**/
+		const { accessToken, refreshToken, roles, permissions, name } =
+			await verifyOtp(user.id, otp);
+
+		return res.success("OTP verified successfully", {
+			accessToken,
+			refreshToken,
+			expiresIn: 3600, // Access token expiry in seconds
+			user: {
+				id: userId,
+				name,
+				roles,
+				permissions,
+			},
+		});
 	} catch (error) {
 		console.error("Error during login:", error);
 
