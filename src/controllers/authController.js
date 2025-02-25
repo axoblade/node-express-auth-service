@@ -84,7 +84,7 @@ const loginUser = async (req, res) => {
 			refreshToken,
 			expiresIn: 3600, // Access token expiry in seconds
 			user: {
-				id: userId,
+				id: user.id,
 				name,
 				roles,
 				permissions,
