@@ -5,6 +5,7 @@ const authRoutes = require("./routes/authRoutes");
 const roleRoutes = require("./routes/roleRoutes");
 const permissionRoutes = require("./routes/permissionRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const integrationRoutes = require("./routes/integrationRoutes");
 const responseFormatter = require("./middlewares/responseFormatter");
 
 dotenv.config();
@@ -22,12 +23,12 @@ app.use(function (req, res, next) {
 	next();
 });
 
-
 app.use(express.json());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/roles", roleRoutes);
 app.use("/api/v1/permissions", permissionRoutes);
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/integration", integrationRoutes);
 
 if (require.main === module) {
 	const PORT = process.env.PORT || 3000;

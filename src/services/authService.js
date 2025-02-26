@@ -312,6 +312,48 @@ const updateUserDetails = async (userId, updates) => {
 	return updatedUser;
 };
 
+const addUser = async (email, name, phone, roleId, verificationLinkUrl) => {
+	const existingUser = await prisma.user.findUnique({ where: { email } });
+	if (existingUser) {
+		throw new Error("Email is already in use");
+	}
+
+	const existingUserByPhone = await prisma.user.findUnique({
+		where: { phone },
+	});
+	if (existingUserByPhone) {
+		throw new Error("Phone number is already in use");
+	}
+
+	const hashedPassword = await bcrypt.hash(generateRandomPassword(), 10);
+
+	const user = await prisma.user.create({
+		data: {
+			email,
+			name,
+			phone,
+			password: hashedPassword,
+			isActive: true,
+			emailVerified: false,
+			roles: {
+				create: {
+					roleId,
+				},
+			},
+		},
+	});
+
+	const token = await generateEmailVerificationToken(user.id);
+
+	await sendVerificationEmail(email, token, verificationLinkUrl);
+	await sendSMS(
+		phone,
+		`Account has been created, Your Verification Token is: ${token}`
+	);
+
+	return user;
+};
+
 module.exports = {
 	register,
 	login,
@@ -324,4 +366,5 @@ module.exports = {
 	resetPassword,
 	updateUserDetails,
 	generateAccessToken,
+	addUser,
 };
