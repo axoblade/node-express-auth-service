@@ -22,6 +22,7 @@ const addNewUser = async (req, res) => {
 			registered_name,
 			staff_photo,
 			section,
+			hasAccess,
 		} = req.body;
 
 		if (!email || !phone || !role) {
@@ -54,7 +55,8 @@ const addNewUser = async (req, res) => {
 			mobile_money_number,
 			registered_name,
 			staff_photo,
-			section
+			section,
+			hasAccess
 		);
 
 		return res.success();

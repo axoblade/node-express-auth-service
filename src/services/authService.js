@@ -326,7 +326,8 @@ const addUser = async (
 	mobile_money_number,
 	registered_name,
 	staff_photo,
-	section
+	section,
+	hasAccess
 ) => {
 	const existingUser = await prisma.user.findUnique({ where: { email } });
 	if (existingUser) {
@@ -366,6 +367,7 @@ const addUser = async (
 			registered_name,
 			staff_photo,
 			section,
+			hasAccess,
 		},
 	});
 

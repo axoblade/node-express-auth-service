@@ -33,6 +33,7 @@ model User {
   otpExpiresAt              DateTime? // Optional expiry time for OTP
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
+  hasAccess Boolean @default(true)
 
   // Relations
   /**roles                     UserRole[]
