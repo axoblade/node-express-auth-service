@@ -103,9 +103,9 @@ const login = async (identifier, password) => {
 	}
 
 	// Check if the email is verified for email-based login
-	if (isEmail && !user.emailVerified) {
+	/**if (isEmail && !user.emailVerified) {
 		throw new Error("Email not verified");
-	}
+	}**/
 
 	// Verify the password
 	const isPasswordValid = await bcrypt.compare(password, user.password);
