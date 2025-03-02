@@ -371,7 +371,7 @@ const addUser = async (
 
 	const token = await generateEmailVerificationToken(user.id);
 
-	await sendVerificationEmail(email, token, verificationLinkUrl);
+	//await sendVerificationEmail(email, token, verificationLinkUrl);
 	await sendSMS(
 		phone,
 		`Account has been created, Your Verification Token is: ${token}`
