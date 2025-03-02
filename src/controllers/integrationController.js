@@ -61,7 +61,8 @@ const addNewUser = async (req, res) => {
 
 		return res.success();
 	} catch (error) {
-		res.error(400, error.message);
+		console.log(error);
+		res.error(400, "Internal server error");
 	}
 };
 
