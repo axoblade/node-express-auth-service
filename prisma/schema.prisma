@@ -11,20 +11,34 @@ model User {
   id                        String   @id @default(uuid()) // Primary Key (UUID)
   email                     String   @unique
   phone                   String   @unique
-  name                      String
+  first_name                      String
+  last_name String
+  middle_name String?
+  initials String?
+  role String
+  address String?
+  salary String?
+  utility String?
+  gender String
+  name_of_bank String?
+  account_number String?
+  mobile_money_number String?
+  registered_name String?
+  staff_photo String?
+  section String?
   password                  String
   isActive                  Boolean  @default(true)
-  emailVerified             Boolean  @default(false)
+  emailVerified             Boolean  @default(true)
   otp                       String?  // Optional field for OTP
   otpExpiresAt              DateTime? // Optional expiry time for OTP
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
 
   // Relations
-  roles                     UserRole[]
+  /**roles                     UserRole[]
   PasswordResetToken        PasswordResetToken[]
   EmailVerificationToken    EmailVerificationToken[]
-  Tag                       UserTag[]
+  Tag                       UserTag[]**/
 }
 
 model Role {
@@ -56,7 +70,7 @@ model UserRole {
   roleId                    String
 
   // Relations
-  user                      User     @relation(fields: [userId], references: [id])
+  //user                      User     @relation(fields: [userId], references: [id])
   role                      Role     @relation(fields: [roleId], references: [id])
 
   @@unique([userId, roleId]) // Prevent duplicate user-role pairs
@@ -91,7 +105,7 @@ model UserTag {
   tagId       String
 
   // Relations
-  user        User @relation(fields: [userId], references: [id])
+  //user        User @relation(fields: [userId], references: [id])
   tag         Tag  @relation(fields: [tagId], references: [id])
 
   @@unique([userId, tagId]) // Prevent duplicate user-tag pairs
@@ -117,7 +131,7 @@ model PasswordResetToken {
   createdAt                 DateTime @default(now())
 
   // Relations
-  user                      User     @relation(fields: [userId], references: [id])
+ // user                      User     @relation(fields: [userId], references: [id])
 }
 
 model EmailVerificationToken {
@@ -128,5 +142,5 @@ model EmailVerificationToken {
   createdAt                 DateTime @default(now())
 
   // Relations
-  user                      User     @relation(fields: [userId], references: [id])
+  //user                      User     @relation(fields: [userId], references: [id])
 }

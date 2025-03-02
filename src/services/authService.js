@@ -143,7 +143,7 @@ const verifyOtp = async (userId, otp) => {
 	});
 
 	// Fetch roles and associated permissions
-	const rolesWithPermissions = await prisma.userRole.findMany({
+	/**const rolesWithPermissions = await prisma.userRole.findMany({
 		where: { userId },
 		include: {
 			role: {
@@ -156,14 +156,14 @@ const verifyOtp = async (userId, otp) => {
 				},
 			},
 		},
-	});
+	});*
 
 	const roles = rolesWithPermissions.map((roleWithPerm) => ({
 		role_name: roleWithPerm.role.name,
 		permissions: roleWithPerm.role.permissions.map((rp) => rp.permission.name),
 	}));
 
-	const permissions = roles.flatMap((role) => role.permissions);
+	const permissions = roles.flatMap((role) => role.permissions);**/
 
 	// Generate tokens
 	const accessToken = await generateAccessToken(userId);
@@ -177,9 +177,7 @@ const verifyOtp = async (userId, otp) => {
 		{ expiresIn: "7d" } // Refresh token expires in 7 days
 	);
 
-	const name = user.name;
-
-	return { accessToken, refreshToken, roles, permissions, name };
+	return { accessToken, refreshToken, user };
 };
 
 const generateAccessToken = async (userId) => {
@@ -190,7 +188,7 @@ const generateAccessToken = async (userId) => {
 	}
 
 	// Fetch roles and associated permissions
-	const rolesWithPermissions = await prisma.userRole.findMany({
+	/**const rolesWithPermissions = await prisma.userRole.findMany({
 		where: { userId },
 		include: {
 			role: {
@@ -210,15 +208,13 @@ const generateAccessToken = async (userId) => {
 		permissions: roleWithPerm.role.permissions.map((rp) => rp.permission.name),
 	}));
 
-	const permissions = roles.flatMap((role) => role.permissions);
+	const permissions = roles.flatMap((role) => role.permissions);**/
 
 	return jwt.sign(
 		{
 			id: user.id,
 			email: user.email,
 			isActive: user.isActive,
-			roles,
-			permissions,
 		},
 		process.env.JWT_SECRET,
 		{ expiresIn: "23h" } // Access token expires in 1 hour
@@ -314,11 +310,23 @@ const updateUserDetails = async (userId, updates) => {
 
 const addUser = async (
 	email,
-	name,
 	phone,
-	roleId,
-	verificationLinkUrl,
-	password
+	role,
+	password,
+	first_name,
+	last_name,
+	middle_name,
+	initials,
+	address,
+	salary,
+	utility,
+	gender,
+	name_of_bank,
+	account_number,
+	mobile_money_number,
+	registered_name,
+	staff_photo,
+	section
 ) => {
 	const existingUser = await prisma.user.findUnique({ where: { email } });
 	if (existingUser) {
@@ -332,21 +340,32 @@ const addUser = async (
 		throw new Error("Phone number is already in use");
 	}
 
-	const hashedPassword = await bcrypt.hash(password, 10);
+	let hashedPassword = await bcrypt.hash(generateRandomPassword(), 10);
+
+	if (password) {
+		hashedPassword = await bcrypt.hash(password, 10);
+	}
 
 	const user = await prisma.user.create({
 		data: {
 			email,
-			name,
+			first_name,
+			last_name,
+			middle_name,
+			initials,
 			phone,
 			password: hashedPassword,
-			isActive: true,
-			emailVerified: false,
-			roles: {
-				create: {
-					roleId,
-				},
-			},
+			role,
+			address,
+			salary,
+			utility,
+			gender,
+			name_of_bank,
+			account_number,
+			mobile_money_number,
+			registered_name,
+			staff_photo,
+			section,
 		},
 	});
 

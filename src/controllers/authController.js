@@ -54,17 +54,21 @@ const loginUser = async (req, res) => {
 		}
 
 		// Attempt login through the login service
-		const user = await login(identifier, password);
+		const _user = await login(identifier, password);
 
 		// Generate and store OTP
-		const otp = await generateOtp(user.id);
+		const otp = await generateOtp(_user.id);
 
 		// Send OTP via email or SMS
 		const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
 		if (isEmail) {
-			await sendEmail(user.email, `Your Login OTP Code`, `Your OTP is: ${otp}`);
+			await sendEmail(
+				_user.email,
+				`Your Login OTP Code`,
+				`Your OTP is: ${otp}`
+			);
 		} else {
-			await sendSMS(user.phone, `Your Login OTP is: ${otp}`);
+			await sendSMS(_user.phone, `Your Login OTP is: ${otp}`);
 		}
 
 		// Use success middleware
@@ -76,19 +80,13 @@ const loginUser = async (req, res) => {
 				requires2FA: true,
 			}
 		);**/
-		const { accessToken, refreshToken, roles, permissions, name } =
-			await verifyOtp(user.id, otp);
+		const { accessToken, refreshToken, user } = await verifyOtp(_user.id, otp);
 
 		return res.success("OTP verified successfully", {
 			accessToken,
 			refreshToken,
 			expiresIn: 3600, // Access token expiry in seconds
-			user: {
-				id: user.id,
-				name,
-				roles,
-				permissions,
-			},
+			user,
 		});
 	} catch (error) {
 		console.error("Error during login:", error);
