@@ -40,6 +40,8 @@ model User {
   PasswordResetToken        PasswordResetToken[]
   EmailVerificationToken    EmailVerificationToken[]
   Tag                       UserTag[]**/
+
+  PasswordResetToken PasswordResetToken[]
 }
 
 model Role {
@@ -132,7 +134,7 @@ model PasswordResetToken {
   createdAt                 DateTime @default(now())
 
   // Relations
- // user                      User     @relation(fields: [userId], references: [id])
+ user                      User     @relation(fields: [userId], references: [id])
 }
 
 model EmailVerificationToken {
