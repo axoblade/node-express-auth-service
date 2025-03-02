@@ -25,6 +25,7 @@ const seed = async () => {
 					isActive: true,
 					emailVerified: true,
 					role: "admin",
+					hasAccess: true
 				},
 			});
 
