@@ -312,7 +312,14 @@ const updateUserDetails = async (userId, updates) => {
 	return updatedUser;
 };
 
-const addUser = async (email, name, phone, roleId, verificationLinkUrl) => {
+const addUser = async (
+	email,
+	name,
+	phone,
+	roleId,
+	verificationLinkUrl,
+	password
+) => {
 	const existingUser = await prisma.user.findUnique({ where: { email } });
 	if (existingUser) {
 		throw new Error("Email is already in use");
@@ -325,7 +332,7 @@ const addUser = async (email, name, phone, roleId, verificationLinkUrl) => {
 		throw new Error("Phone number is already in use");
 	}
 
-	const hashedPassword = await bcrypt.hash(generateRandomPassword(), 10);
+	const hashedPassword = await bcrypt.hash(password, 10);
 
 	const user = await prisma.user.create({
 		data: {

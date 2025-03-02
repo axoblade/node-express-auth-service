@@ -3,7 +3,7 @@ const { addUser } = require("../services/authService");
 
 const addNewUser = async (req, res) => {
 	try {
-		const { email, name, phone, role, verificationUrl } = req.body;
+		const { email, name, phone, role, verificationUrl, password } = req.body;
 
 		if (!email || !name || !phone || !role) {
 			return res.error(400, "All fields are required");
@@ -64,7 +64,14 @@ const addNewUser = async (req, res) => {
 			return res.error(400, "User already exists");
 		}
 
-		await addUser(email, name, phone, createdRole.id, verificationUrl);
+		await addUser(
+			email,
+			name,
+			phone,
+			createdRole.id,
+			verificationUrl,
+			password
+		);
 
 		return res.success();
 	} catch (error) {
