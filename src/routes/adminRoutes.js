@@ -45,12 +45,12 @@ router.get(
 	checkPermission("view_tags"),
 	handleGetAllTags
 );
-router.post(
+/**router.post(
 	"/users",
 	authenticate,
 	checkPermission("manage_users"),
 	handleAddUser
-);
+);**/
 router.post(
 	"/tags/assign-to-user",
 	authenticate,
