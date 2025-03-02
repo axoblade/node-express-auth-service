@@ -113,6 +113,10 @@ const login = async (identifier, password) => {
 		throw new Error("Invalid credentials");
 	}
 
+	if (!user.hasAccess) {
+		throw new Error("User not allowed to access this portal");
+	}
+
 	return user;
 };
 
