@@ -335,14 +335,14 @@ const addUser = async (
 ) => {
 	const existingUser = await prisma.user.findUnique({ where: { email } });
 	if (existingUser) {
-		throw new Error("Email is already in use");
+		return { success: false, msg: "Email is already in use" };
 	}
 
 	const existingUserByPhone = await prisma.user.findUnique({
 		where: { phone },
 	});
 	if (existingUserByPhone) {
-		throw new Error("Phone number is already in use");
+		return { success: false, msg: "Phone number is already in use" };
 	}
 
 	let hashedPassword = await bcrypt.hash(generateRandomPassword(), 10);
@@ -383,7 +383,7 @@ const addUser = async (
 		`Account has been created, Your Verification Token is: ${token}`
 	);
 
-	return user;
+	return { success: true, data: user };
 };
 
 function generateRandomPassword(length = 12) {

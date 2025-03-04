@@ -37,7 +37,7 @@ const addNewUser = async (req, res) => {
 			return res.error(400, "User already exists");
 		}
 
-		await addUser(
+		const userAdded = await addUser(
 			email,
 			phone,
 			role,
@@ -59,6 +59,9 @@ const addNewUser = async (req, res) => {
 			hasAccess
 		);
 
+		if (!userAdded.success) {
+			return res.error(400, userAdded.msg);
+		}
 		return res.success();
 	} catch (error) {
 		console.log(error);
