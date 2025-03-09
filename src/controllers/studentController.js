@@ -1,11 +1,16 @@
-const prisma = require("prisma");
+const prisma = require("../config/prisma");
 
 const createStudent = async (req, res) => {
 	try {
-		console.log(req.user);
+		req.body.createdby = req.user.id;
+	
+		await prisma.student.create({
+			data: req.body
+		})
 		res.success("SUCCESS");
 	} catch (error) {
-		res.error("400", "Internal Server Error");
+		console.log(error)
+		res.error("400", error);
 	}
 };
 
