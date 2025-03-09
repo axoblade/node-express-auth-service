@@ -6,6 +6,7 @@ const roleRoutes = require("./routes/roleRoutes");
 const permissionRoutes = require("./routes/permissionRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const integrationRoutes = require("./routes/integrationRoutes");
+const studentRoutes = require("./routes/studentRoutes");
 const responseFormatter = require("./middlewares/responseFormatter");
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/api/v1/roles", roleRoutes);
 app.use("/api/v1/permissions", permissionRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/integration", integrationRoutes);
+app.use("/api/v1/students", studentRoutes);
 
 if (require.main === module) {
 	const PORT = process.env.PORT || 3000;
